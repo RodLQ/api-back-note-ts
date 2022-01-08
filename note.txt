@@ -1,0 +1,42 @@
+dashboard
+user
+
+cod
+nickname
+password
+name
+position
+dni
+mail
+
+
+INSERT INTO `user` 
+(`cod`, `nickname`, `password`, `name`, `position`, `dni`, `mail`, `date`)
+ VALUES ('1', 'admin', 'admin', 'Amin Juan Ramírez Coas', 'Administracion',
+  '12345678', 'admin@gmail.com', current_timestamp());
+
+
+INSERT INTO `note` (`cod_note`, `cod_user`, `title`, `description`, 
+`img_url`, `date`) VALUES ('1', '1', 'learning programming ', 
+'Angular\r\nReact JS\r\nPHP\r\nJava', 
+'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190626123927/untitlsssssed.png'
+, current_timestamp());
+
+
+//!REGISTRATION
+    public async registration(req:any,res:Response){
+        const pass = req.body.password;
+        //(valor, numeros de saltos)
+        let passEncrypts = await bcrypt.hash(pass, 8 );
+        
+        res.json({ text: passEncrypts });
+        
+        let hash = '$2b$08$hvVabadzj4dl03ASNXXKN.8dVYLmDnjtCWr/3nEjeqGDxieTOY7yK';
+        let compare = bcrypt.compareSync('nuevo',hash);
+        if(compare){
+            console.log('Correcto');
+        }
+        else{
+            console.log('incorrecto');
+        }
+    }
