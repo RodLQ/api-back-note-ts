@@ -40,3 +40,7 @@ INSERT INTO `note` (`cod_note`, `cod_user`, `title`, `description`,
             console.log('incorrecto');
         }
     }
+
+
+"build": "tsc -w",
+"dev": "nodemon build/index.js"
