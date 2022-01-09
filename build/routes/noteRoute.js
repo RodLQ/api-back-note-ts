@@ -14,13 +14,15 @@ class NoteRoute {
         //No TOKEN
         this.router.post('/login', noteController_1.default.loginUser);
         this.router.post('/registration/user', noteController_1.default.registrationUser);
+        //Data User With Token
+        this.router.get('/get/userToken', this.verifyToken, noteController_1.default.getUserOfToken);
         //WHITH TOKEN
         this.router.get('/list/user', this.verifyToken, noteController_1.default.listUser);
         this.router.get('/list/note', this.verifyToken, noteController_1.default.listNote);
         this.router.get('/get/note/:cod', this.verifyToken, noteController_1.default.getNote);
         this.router.post('/registration/note', this.verifyToken, noteController_1.default.registrationNote);
         this.router.put('/update/note/:cod', this.verifyToken, noteController_1.default.updateNote);
-        this.router.put('/update/user/:cod', this.verifyToken, noteController_1.default.updateUser);
+        this.router.put('/update/user', this.verifyToken, noteController_1.default.updateUser);
         this.router.delete('/delete/note/:cod', this.verifyToken, noteController_1.default.deleteNote);
         //LIMIT
         this.router.get('/list/note/rank/:min&:max', this.verifyToken, noteController_1.default.listNoteMinMax);

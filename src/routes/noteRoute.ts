@@ -12,6 +12,9 @@ class NoteRoute{
         //No TOKEN
         this.router.post('/login', noteController.loginUser );
         this.router.post('/registration/user', noteController.registrationUser );
+
+        //Data User With Token
+        this.router.get('/get/userToken', this.verifyToken, noteController.getUserOfToken );
         
         //WHITH TOKEN
         this.router.get('/list/user', this.verifyToken ,noteController.listUser );
@@ -21,7 +24,7 @@ class NoteRoute{
         this.router.post('/registration/note', this.verifyToken ,noteController.registrationNote );
         
         this.router.put('/update/note/:cod', this.verifyToken ,noteController.updateNote);
-        this.router.put('/update/user/:cod', this.verifyToken ,noteController.updateUser);
+        this.router.put('/update/user', this.verifyToken ,noteController.updateUser);
         
         this.router.delete('/delete/note/:cod', this.verifyToken, noteController.deleteNote);
 

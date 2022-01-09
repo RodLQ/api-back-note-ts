@@ -183,17 +183,59 @@ class NoteController {
                     res.sendStatus(403);
                 }
                 else {
-                    database_1.default.query('UPDATE user set ? WHERE cod = ?', [req.body, req.params.cod], function (err, result) {
-                        if (err) {
-                            throw err;
-                        } //Columnas afectadas
-                        if (result.affectedRows > 0) {
-                            res.json({ message: "the user was modified ",
-                                colAfect: result.affectedRows });
-                        }
-                        else {
-                            res.json({ message: "not modified - col unaffected" });
-                        }
+                    //res.json(authData);
+                    let nick = req.body.nickname;
+                    database_1.default.query('SELECT * FROM user WHERE nickname = ? ', nick, function (err, result, fields) {
+                        return __awaiter(this, void 0, void 0, function* () {
+                            if (err) {
+                                throw err;
+                            }
+                            if ((result.length > 0) && (authData.user[0].cod != result[0].cod)) {
+                                res.json({ message: "registered nickname" });
+                            }
+                            else {
+                                let dni = req.body.dni;
+                                database_1.default.query('SELECT * FROM user WHERE dni = ? ', dni, function (err, result, fields) {
+                                    return __awaiter(this, void 0, void 0, function* () {
+                                        if (err) {
+                                            throw err;
+                                        }
+                                        if ((result.length > 0) && (authData.user[0].cod != result[0].cod)) {
+                                            res.json({ message: "registered DNI" });
+                                        }
+                                        else {
+                                            let mail = req.body.mail;
+                                            database_1.default.query('SELECT * FROM user WHERE mail = ? ', mail, function (err, result, fields) {
+                                                return __awaiter(this, void 0, void 0, function* () {
+                                                    if (err) {
+                                                        throw err;
+                                                    }
+                                                    if ((result.length > 0) && (authData.user[0].cod != result[0].cod)) {
+                                                        res.json({ message: "registered mail" });
+                                                    }
+                                                    else {
+                                                        let passEncrypts = yield bcrypt_1.default.hash(req.body.password, 8);
+                                                        req.body.password = passEncrypts;
+                                                        database_1.default.query('UPDATE user set ? WHERE cod = ?', [req.body, authData.user[0].cod], function (err, result) {
+                                                            if (err) {
+                                                                throw err;
+                                                            } //Columnas afectadas
+                                                            if (result.affectedRows > 0) {
+                                                                res.json({ message: "the user was modified ",
+                                                                    colAfect: result.affectedRows });
+                                                            }
+                                                            else {
+                                                                res.json({ message: "not modified - col unaffected" });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
                     });
                 }
             }));
@@ -269,6 +311,33 @@ class NoteController {
                     });
                 }
             });
+        });
+    }
+    //!GET DATA USER IN TOKEN
+    getUserOfToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            jsonwebtoken_1.default.verify(req.token, 'keyCodeToken', (err, authData) => __awaiter(this, void 0, void 0, function* () {
+                if (err) {
+                    res.sendStatus(403);
+                }
+                else {
+                    //res.json({cod:authData});
+                    //res.json({message: req.params.cod, text: "Obtener datos" });
+                    database_1.default.query('SELECT * FROM user WHERE cod = ? ', authData.user[0].cod, function (err, result, fields) {
+                        return __awaiter(this, void 0, void 0, function* () {
+                            if (err) {
+                                throw err;
+                            }
+                            if (result.length > 0) {
+                                res.json({ result: result });
+                            }
+                            else {
+                                res.json({ message: "Cod User not found" });
+                            }
+                        });
+                    });
+                }
+            }));
         });
     }
 }
