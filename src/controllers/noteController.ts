@@ -195,8 +195,8 @@ class NoteController{
                                     }
                                     else {
 
-                                        let passEncrypts = await bcrypt.hash( req.body.password , 8 );
-                                        req.body.password = passEncrypts;
+                                        //let passEncrypts = await bcrypt.hash( req.body.password , 8 );
+                                        //req.body.password = passEncrypts;
 
                                         pool.query('UPDATE user set ? WHERE cod = ?',
                                             [req.body, authData.user[0].cod] , function(err, result){

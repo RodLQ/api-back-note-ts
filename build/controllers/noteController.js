@@ -214,8 +214,8 @@ class NoteController {
                                                         res.json({ message: "registered mail" });
                                                     }
                                                     else {
-                                                        let passEncrypts = yield bcrypt_1.default.hash(req.body.password, 8);
-                                                        req.body.password = passEncrypts;
+                                                        //let passEncrypts = await bcrypt.hash( req.body.password , 8 );
+                                                        //req.body.password = passEncrypts;
                                                         database_1.default.query('UPDATE user set ? WHERE cod = ?', [req.body, authData.user[0].cod], function (err, result) {
                                                             if (err) {
                                                                 throw err;
