@@ -194,45 +194,17 @@ class NoteController {
                                 res.json({ message: "registered nickname" });
                             }
                             else {
-                                let dni = req.body.dni;
-                                database_1.default.query('SELECT * FROM user WHERE dni = ? ', dni, function (err, result, fields) {
-                                    return __awaiter(this, void 0, void 0, function* () {
-                                        if (err) {
-                                            throw err;
-                                        }
-                                        if ((result.length > 0) && (authData.user[0].cod != result[0].cod)) {
-                                            res.json({ message: "registered DNI" });
-                                        }
-                                        else {
-                                            let mail = req.body.mail;
-                                            database_1.default.query('SELECT * FROM user WHERE mail = ? ', mail, function (err, result, fields) {
-                                                return __awaiter(this, void 0, void 0, function* () {
-                                                    if (err) {
-                                                        throw err;
-                                                    }
-                                                    if ((result.length > 0) && (authData.user[0].cod != result[0].cod)) {
-                                                        res.json({ message: "registered mail" });
-                                                    }
-                                                    else {
-                                                        //let passEncrypts = await bcrypt.hash( req.body.password , 8 );
-                                                        //req.body.password = passEncrypts;
-                                                        database_1.default.query('UPDATE user set ? WHERE cod = ?', [req.body, authData.user[0].cod], function (err, result) {
-                                                            if (err) {
-                                                                throw err;
-                                                            } //Columnas afectadas
-                                                            if (result.affectedRows > 0) {
-                                                                res.json({ message: "the user was modified ",
-                                                                    colAfect: result.affectedRows });
-                                                            }
-                                                            else {
-                                                                res.json({ message: "not modified - col unaffected" });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            });
-                                        }
-                                    });
+                                database_1.default.query('UPDATE user set ? WHERE cod = ?', [req.body, authData.user[0].cod], function (err, result) {
+                                    if (err) {
+                                        throw err;
+                                    } //Columnas afectadas
+                                    if (result.affectedRows > 0) {
+                                        res.json({ message: "the user was modified ",
+                                            colAfect: result.affectedRows });
+                                    }
+                                    else {
+                                        res.json({ message: "not modified - col unaffected" });
+                                    }
                                 });
                             }
                         });
