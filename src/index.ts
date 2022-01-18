@@ -7,6 +7,7 @@ class Server{
     public serverHttp:any;
 
     public socket:any;
+    public io:any;
 
     constructor(){
         this.app = express();
@@ -34,28 +35,26 @@ class Server{
 
     webSocket(){
         
-        const io = require('socket.io')( this.serverHttp , 
+        this.io = require('socket.io')( this.serverHttp , 
             {
                 cors: { origin: "*" }
             }     
         );
         
-        io.on( 'connection',  ( socket:any ) => {
+        this.io.on( 'connection',  ( socket:any ) => {
                 console.log(' User conectado, ID: ', socket.id);
 
-                socket.on('modified-note', (data:any)=>{
-                    
-                    console.log(data);
-
+                //? JOIN
+                socket.on( 'join' , ( roomIDUser:any )=>{
+                    socket.join(roomIDUser);
                 } );
-
             }
         );
-        this.socket = io.on( 'connection' , (socket:any) => {socket} );
-
+        this.socket = this.io.on( 'connection' , (socket:any) => {socket} );
     }
+    
 }
 
 const server = new Server();
 server.start();
-export default server.socket;
+export default server;

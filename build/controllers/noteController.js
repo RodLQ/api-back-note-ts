@@ -140,7 +140,9 @@ class NoteController {
                         if (result.affectedRows > 0) {
                             res.json({ message: " Registered Note -:)",
                                 colAfect: result });
-                            index_1.default.emit('modified-note', true);
+                            //server.socket.emit( 'modified-note' , true );
+                            //? EMITIR A LA SALA DEL COD
+                            index_1.default.io.to(authData.user[0].cod).emit('event-room', true);
                         }
                         else {
                             res.json({ message: "not registered note - col unaffected " });
@@ -165,7 +167,9 @@ class NoteController {
                         if (result.affectedRows > 0) {
                             res.json({ message: "the note was modified ",
                                 colAfect: result.affectedRows });
-                            index_1.default.emit('modified-note', true);
+                            //server.socket.emit( 'modified-note' , true );
+                            //? EMITIR A LA SALA DEL COD
+                            index_1.default.io.to(authData.user[0].cod).emit('event-room', true);
                         }
                         else {
                             res.json({ message: "not modified - col unaffected " });
@@ -201,6 +205,7 @@ class NoteController {
                                     if (result.affectedRows > 0) {
                                         res.json({ message: "the user was modified ",
                                             colAfect: result.affectedRows });
+                                        index_1.default.io.to(authData.user[0].cod).emit('event-user', true);
                                     }
                                     else {
                                         res.json({ message: "not modified - col unaffected" });
@@ -228,7 +233,9 @@ class NoteController {
                         if (result.affectedRows > 0) {
                             res.json({ message: "the note was delete ",
                                 colAfect: result.affectedRows });
-                            index_1.default.emit('modified-note', 'true');
+                            //server.socket.emit( 'modified-note' , 'true' );
+                            //? EMITIR A LA SALA DEL COD
+                            index_1.default.io.to(authData.user[0].cod).emit('event-room', true);
                         }
                         else {
                             res.json({ message: "not delete - col unaffected " });
@@ -246,7 +253,6 @@ class NoteController {
                     res.sendStatus(403);
                 }
                 else {
-                    //res.json({message: req.params.cod, text: "Obtener datos" });
                     database_1.default.query('SELECT * FROM note WHERE cod_note = ? ', req.params.cod, function (err, result, fields) {
                         return __awaiter(this, void 0, void 0, function* () {
                             if (err) {
@@ -293,8 +299,6 @@ class NoteController {
                     res.sendStatus(403);
                 }
                 else {
-                    //res.json({cod:authData});
-                    //res.json({message: req.params.cod, text: "Obtener datos" });
                     database_1.default.query('SELECT * FROM user WHERE cod = ? ', authData.user[0].cod, function (err, result, fields) {
                         return __awaiter(this, void 0, void 0, function* () {
                             if (err) {

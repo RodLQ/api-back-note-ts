@@ -29,18 +29,19 @@ class Server {
         });
     }
     webSocket() {
-        const io = require('socket.io')(this.serverHttp, {
+        this.io = require('socket.io')(this.serverHttp, {
             cors: { origin: "*" }
         });
-        io.on('connection', (socket) => {
+        this.io.on('connection', (socket) => {
             console.log(' User conectado, ID: ', socket.id);
-            socket.on('modified-note', (data) => {
-                console.log(data);
+            //? JOIN
+            socket.on('join', (roomIDUser) => {
+                socket.join(roomIDUser);
             });
         });
-        this.socket = io.on('connection', (socket) => { socket; });
+        this.socket = this.io.on('connection', (socket) => { socket; });
     }
 }
 const server = new Server();
 server.start();
-exports.default = server.socket;
+exports.default = server;
